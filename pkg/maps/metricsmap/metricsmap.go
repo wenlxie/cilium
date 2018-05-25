@@ -143,9 +143,14 @@ var (
 // updatePrometheusMetrics checks the metricsmap key value pair
 // and determines which prometheus metrics along with respective labels
 // need to be updated.
-func updatePrometheusMetrics(key *Key, val *Value) {
+func updatePrometheusMetrics(bpfkey bpf.MapKey, bpfvalue bpf.MapValue) {
+	key := bpfkey.(*Key)
+	val := bpfvalue.(*Value)
 	var counter prometheus.Counter
 	var err error
+
+	fmt.Println("MK in updatePrometheusMetrics with key:", key.String())
+	fmt.Println("MK in updatePrometheusMetrics with val:", val.String())
 	if key.IsDrop() {
 		counter, err = metrics.DropCount.GetMetricWithLabelValues(key.DropForwardReason(), key.Direction())
 	} else {
@@ -175,25 +180,13 @@ func SyncMetricsMap() error {
 	file := bpf.MapPath(MapName)
 	metricsmap, err := bpf.OpenMap(file)
 
+	fmt.Println("MK in SyncMetricsMap")
 	if err != nil {
 		return fmt.Errorf("unable to open metrics map: %s", err)
 	}
 	defer metricsmap.Close()
-
-	var key, nextKey Key
-	for {
-		err := metricsmap.GetNextKey(&key, &nextKey)
-		if err != nil {
-			break
-		}
-		entry, err := metricsmap.Lookup(&nextKey)
-		if err != nil {
-			return fmt.Errorf("unable to lookup metrics map: %s", err)
-		}
-		value := entry.(*Value)
-		// Increment Prometheus metrics here.
-		updatePrometheusMetrics(&nextKey, value)
-		key = nextKey
+	if err = metricsmap.DumpWithCallback(updatePrometheusMetrics); err != nil {
+		return fmt.Errorf("error iterating BPF metrics map: %s", err)
 	}
 	return nil
 }

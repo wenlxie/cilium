@@ -25,7 +25,8 @@
 #   unused-packages = true
 
 required = [
-            "github.com/cilium/go-bindata/go-bindata"
+            "github.com/cilium/go-bindata/go-bindata",
+            "github.com/onsi/ginkgo/ginkgo"
             ]
 
 [[constraint]]
@@ -208,7 +209,7 @@ required = [
 
 [[constraint]]
   name = "github.com/onsi/ginkgo"
-  revision = "ba8e856bb854d6771a72ddf6497a42dad3a0c971"
+  revision = "v1.5.0"
 
 [[constraint]]
   name = "github.com/onsi/gomega"

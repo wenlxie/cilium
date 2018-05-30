@@ -33,8 +33,6 @@ contribute to Cilium:
 +----------------------------------------------------------------------------------+--------------------------+-------------------------------------------------------------------------------+
 | `dep <https://github.com/golang/dep/>`_                                          | >= v0.4.1                | ``curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh``  |
 +----------------------------------------------------------------------------------+--------------------------+-------------------------------------------------------------------------------+
-+ `Kubernetes code generator <https://github.com/kubernetes/code-generator>`_      | kubernetes-1.10.0        | ``go get -u k8s.io/code-generator``                                           |
-+----------------------------------------------------------------------------------+--------------------------+-------------------------------------------------------------------------------+
 | `protoc-gen-go <https://github.com/golang/protobuf/tree/master/protoc-gen-go>`_  | latest                   | ``go get -u github.com/golang/protobuf/protoc-gen-go``                        |
 +----------------------------------------------------------------------------------+--------------------------+-------------------------------------------------------------------------------+
 | `protoc-gen-validate <https://github.com/lyft/protoc-gen-validate>`_             | latest                   | ``go get -u github.com/lyft/protoc-gen-validate``                             |

@@ -24,10 +24,13 @@
 #   go-tests = true
 #   unused-packages = true
 
-[prune]
-  go-tests = true
-  unused-packages = true
-  non-go = true
+required = [
+            "github.com/cilium/go-bindata/go-bindata"
+            ]
+
+[[constraint]]
+  name = "github.com/cilium/go-bindata"
+  revision = "e950ad39c6092155a6d89f04c90b1c46d8c97d49"
 
 [[constraint]]
   name = "github.com/c9s/goprocinfo"
@@ -270,3 +273,8 @@
 [[constraint]]
   name = "github.com/containerd/containerd"
   revision = "v1.1.0"
+
+[prune]
+  non-go = true
+  go-tests = true
+  unused-packages = true

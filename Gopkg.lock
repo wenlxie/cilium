@@ -47,6 +47,14 @@
   revision = "0010a05ce49fde7f50669bc7ecda7d41dd6ab824"
 
 [[projects]]
+  name = "github.com/cilium/go-bindata"
+  packages = [
+    ".",
+    "go-bindata"
+  ]
+  revision = "e950ad39c6092155a6d89f04c90b1c46d8c97d49"
+
+[[projects]]
   name = "github.com/containerd/containerd"
   packages = [
     ".",
@@ -1149,6 +1157,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "8587dcabe33a56ed80a7293cd982810929f17d0c58ad75c5dc799b1501cd8748"
+  inputs-digest = "2f9e6f91fe3a40356aa8a8410ed7f0a0a4c8a6f3359f0fde1f9f9bb5cf710249"
   solver-name = "gps-cdcl"
   solver-version = 1

@@ -30,7 +30,8 @@ required = [
             "k8s.io/code-generator/cmd/client-gen",
             "k8s.io/gengo/examples/defaulter-gen/generators",
             "k8s.io/gengo/examples/deepcopy-gen/generators",
-            "github.com/golang/protobuf/protoc-gen-go"
+            "github.com/golang/protobuf/protoc-gen-go",
+            "github.com/lyft/protoc-gen-validate"
             ]
 
 [[constraint]]
@@ -216,7 +217,7 @@ required = [
 
 [[constraint]]
   name = "github.com/lyft/protoc-gen-validate"
-  revision = "d75a15c1da0f853ca31399f30c49088ca5716b04"
+  revision = "v0.0.5"
 
 [[constraint]]
   name = "github.com/mattn/go-shellwords"

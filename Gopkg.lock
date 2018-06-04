@@ -524,9 +524,22 @@
   version = "v0.1.0"
 
 [[projects]]
+  name = "github.com/lyft/protoc-gen-star"
+  packages = ["."]
+  revision = "f3b83fca61817e55058744eb1a3c8e2e95a0dada"
+  version = "v0.3.7"
+
+[[projects]]
   name = "github.com/lyft/protoc-gen-validate"
-  packages = ["validate"]
-  revision = "d75a15c1da0f853ca31399f30c49088ca5716b04"
+  packages = [
+    ".",
+    "templates",
+    "templates/cc",
+    "templates/go",
+    "templates/shared",
+    "validate"
+  ]
+  revision = "v0.0.5"
 
 [[projects]]
   name = "github.com/magiconair/properties"
@@ -1208,6 +1221,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "45d9529ddedf92177de2d1dbebd2426243b31371207ba6ea69481a4053c6049d"
+  inputs-digest = "39fb87f8bdc0858c94cc138638c9e1997de77a6f79fd4653bbfaec205573db80"
   solver-name = "gps-cdcl"
   solver-version = 1

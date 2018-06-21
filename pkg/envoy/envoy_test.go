@@ -17,6 +17,7 @@ package envoy
 import (
 	"context"
 	"errors"
+	"fmt"
 	"net"
 	"os"
 	"path/filepath"
@@ -84,14 +85,16 @@ func (s *EnvoySuite) TestEnvoy(c *C) {
 	c.Assert(envoyProxy, NotNil)
 	log.Debug("started Envoy")
 
+	reallocCallback := func() (uint16, error) { return 0, fmt.Errorf("Not implemented") }
+
 	log.Debug("adding listener1")
-	xdsServer.AddListener("listener1", "1.2.3.4", 8081, true, s.waitGroup)
+	xdsServer.AddListener("listener1", "1.2.3.4", 8081, true, s.waitGroup, reallocCallback)
 
 	log.Debug("adding listener2")
-	xdsServer.AddListener("listener2", "1.2.3.4", 8082, true, s.waitGroup)
+	xdsServer.AddListener("listener2", "1.2.3.4", 8082, true, s.waitGroup, reallocCallback)
 
 	log.Debug("adding listener3")
-	xdsServer.AddListener("listener3", "1.2.3.4", 8083, false, s.waitGroup)
+	xdsServer.AddListener("listener3", "1.2.3.4", 8083, false, s.waitGroup, reallocCallback)
 
 	err := s.waitForProxyCompletion()
 	c.Assert(err, IsNil)
@@ -109,7 +112,7 @@ func (s *EnvoySuite) TestEnvoy(c *C) {
 
 	// Add listener3 again
 	log.Debug("adding listener 3")
-	xdsServer.AddListener("listener3", "1.2.3.4", 8083, false, s.waitGroup)
+	xdsServer.AddListener("listener3", "1.2.3.4", 8083, false, s.waitGroup, reallocCallback)
 
 	err = s.waitForProxyCompletion()
 	c.Assert(err, IsNil)

@@ -357,9 +357,6 @@ type Endpoint struct {
 	// CIDRPolicy is the CIDR based policy configuration of the endpoint.
 	L3Policy *policy.CIDRPolicy `json:"-"`
 
-	// L3Maps is the datapath representation of CIDRPolicy
-	L3Maps L3Maps `json:"-"`
-
 	// Opts are configurable boolean options
 	Opts *option.BoolOptions
 
@@ -1725,7 +1722,6 @@ func (e *Endpoint) LeaveLocked(owner Owner) []error {
 		e.SecurityIdentity = nil
 	}
 
-	e.L3Maps.Close()
 	e.removeDirectory()
 	e.removeFailedDirectory()
 	e.controllers.RemoveAll()

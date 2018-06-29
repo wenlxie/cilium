@@ -16,6 +16,7 @@ package endpoint
 
 import (
 	"fmt"
+	"math"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -51,6 +52,12 @@ const (
 	optionEnabled  = "enabled"
 	optionDisabled = "disabled"
 )
+
+// time: Duration is missing Milliseconds() and Microseconds() getters
+// we need to explicitly convert.
+// Reference:
+// https://github.com/golang/go/issues/5491
+const secondsToMs = 1e3
 
 var (
 	// localHostKey represents an ingress L3 allow from the local host.
@@ -463,6 +470,20 @@ func (e *Endpoint) regeneratePolicy(owner Owner, opts models.ConfigurationMap) (
 		e.getLogger().WithError(err).Debug("Received error while evaluating policy")
 		return false, err
 	}
+
+	regenerateStart := time.Now()
+	// Capture successful regeneration time
+	defer func() {
+		regenerateTime := time.Since(regenerateStart).Seconds() * secondsToMs
+		e.getLogger().WithField(logfields.PolicyRegenerationTime, time.Since(regenerateStart).String()).
+			Info("Regeneration of policy has completed")
+
+		if err == nil {
+			metrics.PolicyRegenerationTime.Add(float64(regenerateTime))
+			metrics.PolicyRegenerationTimeSquare.Add(math.Pow(float64(regenerateTime), 2))
+		}
+	}()
+
 	// Use the old labelsMap instance if the new one is still the same.
 	// Later we can compare the pointers to figure out if labels have changed or not.
 	if reflect.DeepEqual(e.LabelsMap, labelsMap) {
@@ -596,11 +617,18 @@ func (e *Endpoint) regeneratePolicy(owner Owner, opts models.ConfigurationMap) (
 // Called with e.Mutex UNlocked
 func (e *Endpoint) regenerate(owner Owner, reason string) (retErr error) {
 	metrics.EndpointCountRegenerating.Inc()
+	regenerateStart := time.Now()
 	defer func() {
 		metrics.EndpointCountRegenerating.Dec()
 		if retErr == nil {
 			metrics.EndpointRegenerationCount.
 				WithLabelValues(metrics.LabelValueOutcomeSuccess).Inc()
+
+			// Capture successful endpoint generation time
+			regenerateTime := time.Since(regenerateStart).Seconds() * secondsToMs
+			e.getLogger().WithField(logfields.EndpointRegenerationTime, time.Since(regenerateStart).String()).Info("Regeneration of endpoint has completed")
+			metrics.EndpointRegenerationTime.Add(float64(regenerateTime))
+			metrics.EndpointRegenerationTimeSquare.Add(math.Pow(float64(regenerateTime), 2))
 		} else {
 			metrics.EndpointRegenerationCount.
 				WithLabelValues(metrics.LabelValueOutcomeFail).Inc()

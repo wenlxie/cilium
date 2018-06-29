@@ -592,8 +592,8 @@ func (e *Endpoint) regeneratePolicy(owner Owner, opts models.ConfigurationMap) (
 
 	needToRegenerateBPF := optsChanged || policyChanged || e.nextPolicyRevision > e.policyRevision
 
-	regenerateEnd := time.Since(regenerateStart) / time.Second
-	e.getLogger().WithField(logfields.PolicyRegenerationTime, regenerateEnd).
+	regenerateEnd := time.Since(regenerateStart)
+	e.getLogger().WithField(logfields.PolicyRegenerationTime, time.Since(regenerateStart).String()).
 		Info("Regeneration of policy has completed")
 	metrics.PolicyRegenerationTime.Add(float64(regenerateEnd))
 	metrics.PolicyRegenerationTimeSquare.Add(math.Pow(float64(regenerateEnd), 2))
@@ -705,10 +705,12 @@ func (e *Endpoint) regenerate(owner Owner, reason string) (retErr error) {
 	e.bumpPolicyRevision(revision)
 
 	e.getLogger().Info("Endpoint policy recalculated")
-	regenerateEnd := time.Since(regenerateStart) / time.Second
-	e.getLogger().WithField(logfields.EndpointRegenerationTime, regenerateEnd).Info("Regeneration of endpoint has completed")
-	metrics.EndpointRegenerationTime.Add(float64(regenerateEnd))
-	metrics.EndpointRegenerationTimeSquare.Add(math.Pow(float64(regenerateEnd), 2))
+
+	regenerateEnd := time.Since(regenerateStart)
+	e.getLogger().WithField(logfields.EndpointRegenerationTime, time.Since(regenerateStart).String()).
+		Info("Regeneration of endpoint has completed")
+	metrics.PolicyRegenerationTime.Add(float64(regenerateEnd))
+	metrics.PolicyRegenerationTimeSquare.Add(math.Pow(float64(regenerateEnd), 2))
 
 	return nil
 }

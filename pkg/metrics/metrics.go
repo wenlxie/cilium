@@ -92,6 +92,21 @@ var (
 	},
 		[]string{"outcome"})
 
+	// EndpointRegenerationTime is the total time taken to regenerate endpoint.
+	EndpointRegenerationTime = prometheus.NewCounter(prometheus.CounterOpts{
+		Namespace: Namespace,
+		Name:      "endpoint_regeneration_seconds",
+		Help:      "Total time taken to regenerate endpoints",
+	})
+
+	// EndpointRegenerationTimeSquare is the sum of squares of total time taken
+	// to regenerate endpoint.
+	EndpointRegenerationTimeSquare = prometheus.NewCounter(prometheus.CounterOpts{
+		Namespace: Namespace,
+		Name:      "endpoint_regeneration_square_seconds",
+		Help:      "Sum of squares of total time taken to regenerate endpoints",
+	})
+
 	// Policy
 
 	// PolicyCount is the number of policies loaded into the agent
@@ -99,6 +114,22 @@ var (
 		Namespace: Namespace,
 		Name:      "policy_count",
 		Help:      "Number of policies currently loaded",
+	})
+
+	// PolicyRegenerationTime is the total time taken to generate policies
+	// in seconds.
+	PolicyRegenerationTime = prometheus.NewCounter(prometheus.CounterOpts{
+		Namespace: Namespace,
+		Name:      "policy_regeneration_seconds",
+		Help:      "Total time taken to regenerate policies",
+	})
+
+	// PolicyRegenerationTimeSquare is the sum of squares of total time taken
+	// to generate policies.
+	PolicyRegenerationTimeSquare = prometheus.NewCounter(prometheus.CounterOpts{
+		Namespace: Namespace,
+		Name:      "policy_regeneration_square_seconds",
+		Help:      "Sum of squares of total time taken to regenerate policies",
 	})
 
 	// PolicyRevision is the current policy revision number for this agent
@@ -215,8 +246,12 @@ func init() {
 
 	MustRegister(EndpointCountRegenerating)
 	MustRegister(EndpointRegenerationCount)
+	MustRegister(EndpointRegenerationTime)
+	MustRegister(EndpointRegenerationTimeSquare)
 
 	MustRegister(PolicyCount)
+	MustRegister(PolicyRegenerationTime)
+	MustRegister(PolicyRegenerationTimeSquare)
 	MustRegister(PolicyRevision)
 	MustRegister(PolicyImportErrors)
 
